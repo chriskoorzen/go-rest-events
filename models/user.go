@@ -40,7 +40,7 @@ func (user *User) Save() error {
 	return err
 }
 
-func (user User) ValidateCredentials() error {
+func (user *User) ValidateCredentials() error {
 	// Check if user exists in database
 	query := `
 	SELECT id, password
@@ -62,5 +62,6 @@ func (user User) ValidateCredentials() error {
 		return errors.New("invalid credentials")
 	}
 
+	user.ID = id
 	return nil
 }

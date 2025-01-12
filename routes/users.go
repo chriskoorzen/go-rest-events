@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/chriskoorzen/go-rest-demo/models"
+	"github.com/chriskoorzen/go-rest-demo/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -53,8 +54,17 @@ func loginUser(context *gin.Context) {
 	// If binding is successful, try to validate the user
 	err = user.ValidateCredentials()
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
+		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Could not login user",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	token, err := utils.GenerateToken(user.ID, user.Email)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not generate token",
 			"error":   err.Error(),
 		})
 		return
@@ -62,6 +72,7 @@ func loginUser(context *gin.Context) {
 
 	// return success message
 	context.JSON(http.StatusOK, gin.H{
-		"message": "User logged in",
+		"message": "Login successful",
+		"token":   token,
 	})
 }
