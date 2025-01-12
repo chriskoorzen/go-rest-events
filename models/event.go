@@ -79,3 +79,29 @@ func GetAllEvents() ([]Event, error) {
 
 	return events, nil
 }
+
+func GetEventByID(id int64) (*Event, error) {
+	// Get single event by ID
+	query := "SELECT * FROM events WHERE id = ?"
+	row := db.DB.QueryRow(query, id)
+
+	var event Event
+	var datetimeStr string
+	err := row.Scan(
+		&event.ID,
+		&event.Title,
+		&event.Description,
+		&event.Location,
+		&datetimeStr,
+		&event.UserID,
+	)
+	if err != nil {
+		return nil, err
+	}
+	event.DateTime, err = time.Parse(time.RFC3339Nano, datetimeStr)
+	if err != nil {
+		return nil, err
+	}
+
+	return &event, nil
+}

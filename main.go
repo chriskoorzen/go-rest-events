@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/chriskoorzen/go-rest-demo/db"
 	"github.com/chriskoorzen/go-rest-demo/models"
@@ -28,6 +29,8 @@ func main() {
 
 	server.GET("/events", getEvents)
 	server.POST("/events", createEvent)
+
+	server.GET("/events/:eventsID", getSingleEvent)
 
 	server.Run(":8080")
 }
@@ -74,6 +77,30 @@ func createEvent(context *gin.Context) {
 	context.JSON(http.StatusCreated, gin.H{
 		"message": "POST successful",
 		"event":   event,
+	})
+}
+
+func getSingleEvent(context *gin.Context) {
+	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid event ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	event, err := models.GetEventByID(eventID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not get event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"event": event,
 	})
 }
 

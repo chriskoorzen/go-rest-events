@@ -1,4 +1,8 @@
+### Get all events
 GET http://localhost:8080/events
+
+### Get a single event
+GET http://localhost:8080/events/13
 
 ### Create a new event
 POST http://localhost:8080/events
