@@ -7,7 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var DB *sql.DB
+var DB *sql.DB // export pointer to database instance
 
 func InitDB() {
 	var err error

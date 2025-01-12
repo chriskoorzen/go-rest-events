@@ -34,7 +34,7 @@ func createUser(context *gin.Context) {
 	// return newly created user
 	context.JSON(http.StatusCreated, gin.H{
 		"message": "New user signed up",
-		"user":    user,
+		"user":    user, // TODO: remove in production
 	})
 }
 

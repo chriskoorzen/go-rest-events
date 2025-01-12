@@ -20,5 +20,6 @@ func main() {
 	// Init Routes
 	routes.RegisterRoutes(server)
 
+	// Start Server
 	server.Run(":8080")
 }
