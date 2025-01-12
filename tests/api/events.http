@@ -41,3 +41,23 @@ Content-Type: application/json
   "datetime": "{{$datetime iso8601}}",
   "location": "Updated Location"
 }
+
+### Update an event with invalid id
+PUT http://localhost:8080/events/13a
+Content-Type: application/json
+
+{
+  "title": "Updated Event",
+  "description": "This is an updated event",
+  "datetime": "{{$datetime iso8601}}",
+  "location": "Updated Location"
+}
+
+### Update an event with incomplete request body
+PUT http://localhost:8080/events/13
+Content-Type: application/json
+
+{
+  "title": "Updated Event",
+  "location": "Updated Location"
+}
