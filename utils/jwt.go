@@ -9,7 +9,7 @@ import (
 
 const secretKey = "reallyhardtoguesssupersecretkey"
 
-func GenerateToken(userID int64, userEmail string) (string, error) {
+func GenerateJWToken(userID int64, userEmail string) (string, error) {
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email":  userEmail,
 		"userID": userID,
@@ -20,7 +20,7 @@ func GenerateToken(userID int64, userEmail string) (string, error) {
 	return token, err
 }
 
-func VerifyToken(token string) error {
+func VerifyJWToken(token string) error {
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
