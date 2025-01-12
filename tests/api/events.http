@@ -1,0 +1,27 @@
+GET http://localhost:8080/events
+
+### Create a new event
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+  "title": "Test Event",
+  "description": "This is a test event",
+  "datetime": "{{$datetime iso8601}}",
+  "location": "Test Location"
+}
+
+### Incomplete request body
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+  "title": "Bad Event",
+  "description": "This is a bad event. No location or datetime"
+}
+
+### Empty request body
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{ }

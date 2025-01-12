@@ -1,0 +1,12 @@
+{
+    "vscode" : {
+        "extensions" : [
+            {
+                "name" : "REST Client",
+                "publisher" : "humao.rest-client",
+                "version" : "0.25.1",
+                "repo": "https://github.com/Huachao/vscode-restclient"
+            }
+        ]
+    }
+}
