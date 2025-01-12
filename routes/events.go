@@ -123,6 +123,38 @@ func updateEvent(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully updated event"})
 }
 
+func deleteEvent(context *gin.Context) {
+	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid event ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// check if event exists
+	event, err := models.GetEventByID(eventID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not get event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	err = event.Delete()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not delete event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Successfully deleted event"})
+}
+
 func devOutputBodyToConsole(context *gin.Context) {
 	// output the raw body for dev purposes
 	body, _ := io.ReadAll(context.Request.Body)

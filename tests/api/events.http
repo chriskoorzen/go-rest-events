@@ -61,3 +61,9 @@ Content-Type: application/json
   "title": "Updated Event",
   "location": "Updated Location"
 }
+
+### Delete a single event
+DELETE http://localhost:8080/events/16
+
+### Delete an event with invalid id
+DELETE http://localhost:8080/events/16a
