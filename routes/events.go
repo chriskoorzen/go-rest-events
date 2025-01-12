@@ -80,6 +80,49 @@ func getSingleEvent(context *gin.Context) {
 	})
 }
 
+func updateEvent(context *gin.Context) {
+	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid event ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// check if event exists
+	_, err = models.GetEventByID(eventID)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not get event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	var updatedEvent models.Event
+	err = context.ShouldBindJSON(&updatedEvent)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Could not parse POST request",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	updatedEvent.ID = eventID
+	err = updatedEvent.Update()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not update event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Successfully updated event"})
+}
+
 func devOutputBodyToConsole(context *gin.Context) {
 	// output the raw body for dev purposes
 	body, _ := io.ReadAll(context.Request.Body)

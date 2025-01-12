@@ -29,3 +29,15 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 { }
+
+
+### Update an event
+PUT http://localhost:8080/events/13
+Content-Type: application/json
+
+{
+  "title": "Updated Event",
+  "description": "This is an updated event",
+  "datetime": "{{$datetime iso8601}}",
+  "location": "Updated Location"
+}
