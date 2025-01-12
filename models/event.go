@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/chriskoorzen/go-rest-demo/db"
+)
 
 type Event struct {
-	ID          int       `json:"id"`
+	ID          int64     `json:"id"`
 	Title       string    `json:"title"       binding:"required"`
 	Description string    `json:"description" binding:"required"`
 	Location    string    `json:"location"    binding:"required"`
@@ -11,9 +15,28 @@ type Event struct {
 	UserID      int       `json:"user_id"`
 }
 
-func (e Event) Save() error {
+func (event *Event) Save() error {
 	// Save event to database
-	return nil
+	query := `
+	INSERT INTO events (title, description, location, datetime, userID)
+	VALUES (?, ?, ?, ?, ?)`
+
+	stmnt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+
+	defer stmnt.Close()
+
+	result, err := stmnt.Exec(event.Title, event.Description, event.Location, event.DateTime, event.UserID)
+	if err != nil {
+		return err
+	}
+	id, err := result.LastInsertId()
+
+	event.ID = id
+
+	return err
 }
 
 func GetAllEvents() []Event {
