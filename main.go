@@ -6,12 +6,18 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/chriskoorzen/go-rest-demo/db"
 	"github.com/chriskoorzen/go-rest-demo/models"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	fmt.Println("Hello, REST API!")
+
+	// Init Database
+	db.InitDB()
+
+	// Init Server
 	server := gin.Default()
 
 	server.GET("/", func(context *gin.Context) {
