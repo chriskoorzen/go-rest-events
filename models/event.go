@@ -27,8 +27,13 @@ func (event *Event) Save() error {
 	}
 
 	defer stmnt.Close()
-
-	result, err := stmnt.Exec(event.Title, event.Description, event.Location, event.DateTime, event.UserID)
+	result, err := stmnt.Exec(
+		event.Title,
+		event.Description,
+		event.Location,
+		event.DateTime.Format(time.RFC3339Nano),
+		event.UserID,
+	)
 	if err != nil {
 		return err
 	}
@@ -39,7 +44,38 @@ func (event *Event) Save() error {
 	return err
 }
 
-func GetAllEvents() []Event {
+func GetAllEvents() ([]Event, error) {
 	// Get all events from database
-	return []Event{}
+	query := "SELECT * FROM events"
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var events []Event
+	for rows.Next() {
+		var event Event
+		var datetimeStr string
+		err := rows.Scan(
+			&event.ID,
+			&event.Title,
+			&event.Description,
+			&event.Location,
+			&datetimeStr,
+			&event.UserID,
+		)
+		if err != nil {
+			return nil, err
+		}
+		event.DateTime, err = time.Parse(time.RFC3339Nano, datetimeStr)
+		if err != nil {
+			return nil, err
+		}
+
+		events = append(events, event)
+	}
+
+	return events, nil
 }
