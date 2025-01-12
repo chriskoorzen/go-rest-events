@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/chriskoorzen/go-rest-demo/db"
 	"github.com/chriskoorzen/go-rest-demo/utils"
 )
@@ -36,4 +38,29 @@ func (user *User) Save() error {
 
 	user.ID = id
 	return err
+}
+
+func (user User) ValidateCredentials() error {
+	// Check if user exists in database
+	query := `
+	SELECT id, password
+	FROM users
+	WHERE email = ?`
+
+	row := db.DB.QueryRow(query, user.Email)
+
+	var id int64
+	var hashedPassword string
+
+	err := row.Scan(&id, &hashedPassword)
+	if err != nil {
+		return errors.New("invalid credentials")
+	}
+
+	passwordIsValid := utils.CheckPasswordHash(user.Password, hashedPassword)
+	if !passwordIsValid {
+		return errors.New("invalid credentials")
+	}
+
+	return nil
 }

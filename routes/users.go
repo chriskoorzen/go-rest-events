@@ -36,3 +36,32 @@ func createUser(context *gin.Context) {
 		"user":    user,
 	})
 }
+
+func loginUser(context *gin.Context) {
+	devOutputBodyToConsole(context) // output the raw body to console
+
+	var user models.User
+	err := context.ShouldBindJSON(&user)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Could not parse POST request",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// If binding is successful, try to validate the user
+	err = user.ValidateCredentials()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Could not login user",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	// return success message
+	context.JSON(http.StatusOK, gin.H{
+		"message": "User logged in",
+	})
+}
