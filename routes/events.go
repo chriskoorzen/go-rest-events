@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/chriskoorzen/go-rest-demo/models"
-	"github.com/chriskoorzen/go-rest-demo/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,25 +26,8 @@ func getEvents(context *gin.Context) {
 func createEvent(context *gin.Context) {
 	devOutputBodyToConsole(context) // output the raw body to console
 
-	// Add authorisation check
-	token := context.GetHeader("Authorization")
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Not authorized",
-		})
-		return
-	}
-	userID, err := utils.VerifyJWToken(token)
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Not authorized",
-		})
-		return
-	}
-	// end authorisation check
-
 	var event models.Event
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Could not parse POST request",
@@ -53,6 +35,9 @@ func createEvent(context *gin.Context) {
 		})
 		return
 	}
+
+	// Retrieve userID from context
+	userID := context.GetInt64("userID")
 	event.UserID = userID // connect event to specific user
 
 	// If binding is successful, try to save the event
