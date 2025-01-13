@@ -144,3 +144,35 @@ func GetEventByID(id int64) (*Event, error) {
 
 	return &event, nil
 }
+
+func (event *Event) Register(userID int64) error {
+	query := `
+	INSERT INTO registrations (eventID, userID)
+	VALUES (?, ?)`
+
+	stmnt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmnt.Close()
+
+	_, err = stmnt.Exec(event.ID, userID)
+
+	return err
+}
+
+func (event Event) CancelRegistration(userID int64) error {
+	query := `
+	DELETE FROM registrations
+	WHERE eventID = ? AND userID = ?`
+
+	stmnt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmnt.Close()
+
+	_, err = stmnt.Exec(event.ID, userID)
+
+	return err
+}
