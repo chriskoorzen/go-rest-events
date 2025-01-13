@@ -35,7 +35,7 @@ func createEvent(context *gin.Context) {
 		})
 		return
 	}
-	err := utils.VerifyJWToken(token)
+	userID, err := utils.VerifyJWToken(token)
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized",
@@ -53,6 +53,7 @@ func createEvent(context *gin.Context) {
 		})
 		return
 	}
+	event.UserID = userID // connect event to specific user
 
 	// If binding is successful, try to save the event
 	err = event.Save()

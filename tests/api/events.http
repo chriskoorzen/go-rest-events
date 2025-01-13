@@ -7,9 +7,10 @@ GET http://localhost:8080/events/13
 ### Create a new event
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjc1Njk1OSwidXNlcklEIjo1fQ.UXXyeP2KH2HoDcektsvEZF_n3gTu5MFZxsBItog9_QA
 
 {
-  "title": "Test Event",
+  "title": "Test user Event",
   "description": "This is a test event",
   "datetime": "{{$datetime iso8601}}",
   "location": "Test Location"
