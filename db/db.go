@@ -46,12 +46,27 @@ func createTables() {
       location TEXT NOT NULL,
       datetime TEXT NOT NULL,
       userID INTEGER,
-	  FOREIGN KEY (userID) REFERENCES users(id)
+      FOREIGN KEY (userID) REFERENCES users(id)
     );`
 
 	_, err = DB.Exec(createEventsTable)
 	if err != nil {
 		fmt.Println("Error creating 'Events' table")
+		panic(err)
+	}
+
+	createRegistrationsTable := `
+    CREATE TABLE IF NOT EXISTS registrations (
+      id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+      eventID INTEGER NOT NULL,
+      userID INTEGER NOT NULL,
+      FOREIGN KEY (eventID) REFERENCES events(id),
+      FOREIGN KEY (userID) REFERENCES users(id)
+    );`
+
+	_, err = DB.Exec(createRegistrationsTable)
+	if err != nil {
+		fmt.Println("Error creating 'Registrations' table")
 		panic(err)
 	}
 }
