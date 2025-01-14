@@ -7,18 +7,18 @@ import (
 )
 
 type Event struct {
-	ID          int64     `json:"id"`
+	ID          int64     `json:"-"`
 	Title       string    `json:"title"       binding:"required"`
 	Description string    `json:"description" binding:"required"`
 	Location    string    `json:"location"    binding:"required"`
 	DateTime    time.Time `json:"datetime"    binding:"required"`
-	UserID      int64     `json:"user_id"`
+	CreatorID   int64     `json:"-"`
 }
 
 func (event *Event) Save() error {
 	// Save event to database
 	query := `
-	INSERT INTO events (title, description, location, datetime, userID)
+	INSERT INTO events (title, description, location, datetime, creatorID)
 	VALUES (?, ?, ?, ?, ?)`
 
 	stmnt, err := db.DB.Prepare(query)
@@ -32,7 +32,7 @@ func (event *Event) Save() error {
 		event.Description,
 		event.Location,
 		event.DateTime.Format(time.RFC3339Nano),
-		event.UserID,
+		event.CreatorID,
 	)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (event *Event) Update() error {
 	// Update event in database
 	query := `
 	UPDATE events
-	SET title = ?, description = ?, location = ?, datetime = ?, userID = ?
+	SET title = ?, description = ?, location = ?, datetime = ?
 	WHERE id = ?`
 
 	stmnt, err := db.DB.Prepare(query)
@@ -62,7 +62,6 @@ func (event *Event) Update() error {
 		event.Description,
 		event.Location,
 		event.DateTime.Format(time.RFC3339Nano),
-		event.UserID,
 		event.ID,
 	)
 
@@ -85,7 +84,9 @@ func (event Event) Delete() error {
 
 func GetAllEvents() ([]Event, error) {
 	// Get all events from database
-	query := "SELECT * FROM events"
+	query := `
+	SELECT title, description, location, datetime
+	FROM events`
 	rows, err := db.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -98,12 +99,10 @@ func GetAllEvents() ([]Event, error) {
 		var event Event
 		var datetimeStr string
 		err := rows.Scan(
-			&event.ID,
 			&event.Title,
 			&event.Description,
 			&event.Location,
 			&datetimeStr,
-			&event.UserID,
 		)
 		if err != nil {
 			return nil, err
@@ -121,18 +120,19 @@ func GetAllEvents() ([]Event, error) {
 
 func GetEventByID(id int64) (*Event, error) {
 	// Get single event by ID
-	query := "SELECT * FROM events WHERE id = ?"
+	query := `
+	SELECT title, description, location, datetime
+	FROM events
+	WHERE id = ?`
 	row := db.DB.QueryRow(query, id)
 
 	var event Event
 	var datetimeStr string
 	err := row.Scan(
-		&event.ID,
 		&event.Title,
 		&event.Description,
 		&event.Location,
 		&datetimeStr,
-		&event.UserID,
 	)
 	if err != nil {
 		return nil, err

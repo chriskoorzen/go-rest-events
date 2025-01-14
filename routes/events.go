@@ -40,7 +40,7 @@ func createEvent(context *gin.Context) {
 
 	// Retrieve userID from context
 	userID := context.GetInt64("userID")
-	event.UserID = userID // connect event to specific user
+	event.CreatorID = userID // connect event to specific user
 
 	// If binding is successful, try to save the event
 	err = event.Save()
@@ -109,7 +109,7 @@ func updateEvent(context *gin.Context) {
 	}
 
 	// check if user is authorised to update event -> is the creator of the event
-	if event.UserID != context.GetInt64("userID") {
+	if event.CreatorID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to update event",
 			"code":    http.StatusUnauthorized,
@@ -166,7 +166,7 @@ func deleteEvent(context *gin.Context) {
 	}
 
 	// check if user is authorised to delete event -> is the creator of the event
-	if event.UserID != context.GetInt64("userID") {
+	if event.CreatorID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to delete event",
 			"code":    http.StatusUnauthorized,
@@ -286,7 +286,7 @@ func getEventRegistrations(context *gin.Context) {
 
 	// check if user is authorised to view registrations
 	// -> is the creator of the event
-	if event.UserID != context.GetInt64("userID") {
+	if event.CreatorID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to view registrations for event",
 			"code":    http.StatusUnauthorized,

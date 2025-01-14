@@ -45,8 +45,8 @@ func createTables() {
       description TEXT NOT NULL,
       location TEXT NOT NULL,
       datetime TEXT NOT NULL,
-      userID INTEGER,
-      FOREIGN KEY (userID) REFERENCES users(id)
+      creatorID INTEGER,
+      FOREIGN KEY (creatorID) REFERENCES users(id)
     );`
 
 	_, err = DB.Exec(createEventsTable)
