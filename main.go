@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/chriskoorzen/go-rest-demo/db"
-	"github.com/chriskoorzen/go-rest-demo/routes"
+	"github.com/chriskoorzen/go-rest-events/db"
+	"github.com/chriskoorzen/go-rest-events/routes"
 	"github.com/gin-gonic/gin"
 )
 

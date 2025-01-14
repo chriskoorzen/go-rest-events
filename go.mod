@@ -1,4 +1,4 @@
-module github.com/chriskoorzen/go-rest-demo
+module github.com/chriskoorzen/go-rest-events
 
 go 1.22.2
 

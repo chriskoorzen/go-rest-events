@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/chriskoorzen/go-rest-demo/middleware"
+	"github.com/chriskoorzen/go-rest-events/middleware"
 	"github.com/gin-gonic/gin"
 )
 

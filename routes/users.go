@@ -3,8 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"github.com/chriskoorzen/go-rest-demo/models"
-	"github.com/chriskoorzen/go-rest-demo/utils"
+	"github.com/chriskoorzen/go-rest-events/models"
+	"github.com/chriskoorzen/go-rest-events/utils"
 	"github.com/gin-gonic/gin"
 )
 

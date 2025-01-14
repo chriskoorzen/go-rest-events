@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/chriskoorzen/go-rest-demo/models"
+	"github.com/chriskoorzen/go-rest-events/models"
 	"github.com/gin-gonic/gin"
 )
 

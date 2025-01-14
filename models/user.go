@@ -3,8 +3,8 @@ package models
 import (
 	"errors"
 
-	"github.com/chriskoorzen/go-rest-demo/db"
-	"github.com/chriskoorzen/go-rest-demo/utils"
+	"github.com/chriskoorzen/go-rest-events/db"
+	"github.com/chriskoorzen/go-rest-events/utils"
 )
 
 // "User" is the struct that must be used to interact with the database internally
