@@ -11,9 +11,10 @@ import (
 func getEvents(context *gin.Context) {
 	events, err := models.GetAllEvents()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get events",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -29,9 +30,10 @@ func createEvent(context *gin.Context) {
 	var event models.Event
 	err := context.ShouldBindJSON(&event)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Could not parse POST request",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -43,9 +45,10 @@ func createEvent(context *gin.Context) {
 	// If binding is successful, try to save the event
 	err = event.Save()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not save event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -60,18 +63,20 @@ func createEvent(context *gin.Context) {
 func getSingleEvent(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
 
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -84,9 +89,10 @@ func getSingleEvent(context *gin.Context) {
 func updateEvent(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -94,9 +100,10 @@ func updateEvent(context *gin.Context) {
 	// check if event exists
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -105,6 +112,7 @@ func updateEvent(context *gin.Context) {
 	if event.UserID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to update event",
+			"code":    http.StatusUnauthorized,
 		})
 		return
 	}
@@ -113,9 +121,10 @@ func updateEvent(context *gin.Context) {
 	var updatedEvent models.Event
 	err = context.ShouldBindJSON(&updatedEvent)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Could not parse POST request",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -123,9 +132,10 @@ func updateEvent(context *gin.Context) {
 	updatedEvent.ID = eventID
 	err = updatedEvent.Update()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not update event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -136,9 +146,10 @@ func updateEvent(context *gin.Context) {
 func deleteEvent(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -146,9 +157,10 @@ func deleteEvent(context *gin.Context) {
 	// check if event exists
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -157,6 +169,7 @@ func deleteEvent(context *gin.Context) {
 	if event.UserID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to delete event",
+			"code":    http.StatusUnauthorized,
 		})
 		return
 	}
@@ -164,9 +177,10 @@ func deleteEvent(context *gin.Context) {
 	// attempt to delete event
 	err = event.Delete()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not delete event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -177,9 +191,10 @@ func deleteEvent(context *gin.Context) {
 func registerForEvent(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -187,9 +202,10 @@ func registerForEvent(context *gin.Context) {
 	// check if event exists
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -198,9 +214,10 @@ func registerForEvent(context *gin.Context) {
 	userID := context.GetInt64("userID")
 	err = event.Register(userID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not register for event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -211,9 +228,10 @@ func registerForEvent(context *gin.Context) {
 func cancelRegistration(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -221,9 +239,10 @@ func cancelRegistration(context *gin.Context) {
 	// check if event exists
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -232,9 +251,10 @@ func cancelRegistration(context *gin.Context) {
 	userID := context.GetInt64("userID")
 	err = event.CancelRegistration(userID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not cancel registration for event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -245,9 +265,10 @@ func cancelRegistration(context *gin.Context) {
 func getEventRegistrations(context *gin.Context) {
 	eventID, err := strconv.ParseInt(context.Param("eventsID"), 10, 64)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid event ID",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -255,9 +276,10 @@ func getEventRegistrations(context *gin.Context) {
 	// check if event exists
 	event, err := models.GetEventByID(eventID)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
@@ -267,15 +289,17 @@ func getEventRegistrations(context *gin.Context) {
 	if event.UserID != context.GetInt64("userID") {
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Not authorized to view registrations for event",
+			"code":    http.StatusUnauthorized,
 		})
 		return
 	}
 
 	registrations, err := event.GetRegistrations()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not get registrations for event",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}

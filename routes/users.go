@@ -14,9 +14,10 @@ func createUser(context *gin.Context) {
 	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Could not parse POST request",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -24,17 +25,17 @@ func createUser(context *gin.Context) {
 	// If binding is successful, try to save the user
 	err = user.Save()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not save user",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
 
 	// return newly created user
 	context.JSON(http.StatusCreated, gin.H{
-		"message": "New user signed up",
-		"user":    user, // TODO: remove in production
+		"message": "New user successfully created",
 	})
 }
 
@@ -44,9 +45,10 @@ func loginUser(context *gin.Context) {
 	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusBadRequest, gin.H{
 			"message": "Could not parse POST request",
-			"error":   err.Error(),
+			"code":    http.StatusBadRequest,
 		})
 		return
 	}
@@ -54,18 +56,20 @@ func loginUser(context *gin.Context) {
 	// If binding is successful, try to validate the user
 	err = user.ValidateCredentials()
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusUnauthorized, gin.H{
 			"message": "Could not login user",
-			"error":   err.Error(),
+			"code":    http.StatusUnauthorized,
 		})
 		return
 	}
 
 	token, err := utils.GenerateJWToken(user.ID, user.Email)
 	if err != nil {
+		context.Error(err)
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Could not generate token",
-			"error":   err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 		return
 	}
