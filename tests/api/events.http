@@ -7,7 +7,7 @@ GET http://localhost:8080/events/13
 ### Create a new event
 POST http://localhost:8080/events
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjc1Njk1OSwidXNlcklEIjo1fQ.UXXyeP2KH2HoDcektsvEZF_n3gTu5MFZxsBItog9_QA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjg1MjQ2MCwidXNlcklEIjo1fQ.shuX7nLAMXpsT6FXdFRhv4FYb9XeuB5wHyUGTvKPw_c
 
 {
   "title": "Test user Event",
@@ -19,6 +19,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBl
 ### Incomplete request body
 POST http://localhost:8080/events
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjg1MjQ2MCwidXNlcklEIjo1fQ.shuX7nLAMXpsT6FXdFRhv4FYb9XeuB5wHyUGTvKPw_c
 
 {
   "title": "Bad Event",

@@ -8,6 +8,7 @@ import (
 )
 
 func RegisterRoutes(server *gin.Engine) {
+	server.Use(middleware.ErrorHandler)
 
 	protected := server.Group("/")
 	protected.Use(middleware.AuthenticateJWT)

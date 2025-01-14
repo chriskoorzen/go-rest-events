@@ -24,5 +24,6 @@ func AuthenticateJWT(context *gin.Context) {
 		return
 	}
 	context.Set("userID", userID)
-	context.Next()
+
+	context.Next() // Process request
 }
