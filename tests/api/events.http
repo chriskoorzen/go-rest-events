@@ -68,3 +68,22 @@ DELETE http://localhost:8080/events/16
 
 ### Delete an event with invalid id
 DELETE http://localhost:8080/events/16a
+
+
+### Register for an event
+POST http://localhost:8080/events/1/register
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMkBleGFtcGxlLmNvbSIsImV4cCI6MTczNjg0NzkzNCwidXNlcklEIjoyfQ.0lXwTObyUL67EdDv79nXjbZHatY1-pGVqlLg2hkwc2w
+
+{ }
+
+### Cancel registration for an event
+DELETE http://localhost:8080/events/1/register
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyNUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjg0NzgzOCwidXNlcklEIjozfQ.CI2WS209vykveRxjpb17n7D3hbTK7m8HOiZt4kMGJs0
+
+{ }
+
+### See all registrations for an event
+GET http://localhost:8080/events/1/register
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3R1c2VyMUBleGFtcGxlLmNvbSIsImV4cCI6MTczNjg0ODA3MywidXNlcklEIjo1fQ.Xif40wQIqgK9u_77VjbneKVL6XjrEuGG0rdEs_TouFE
