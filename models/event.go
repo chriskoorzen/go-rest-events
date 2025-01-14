@@ -177,9 +177,9 @@ func (event Event) CancelRegistration(userID int64) error {
 	return err
 }
 
-func (event *Event) GetRegistrations() ([]User, error) {
+func (event *Event) GetRegistrations() ([]UserExposedJSON, error) {
 	query := `
-	SELECT u.id, u.email
+	SELECT u.email
 	FROM registrations r
 	JOIN users u ON r.userID = u.id
 	WHERE r.eventID = ?`
@@ -190,10 +190,10 @@ func (event *Event) GetRegistrations() ([]User, error) {
 	}
 	defer rows.Close()
 
-	var users []User
+	var users []UserExposedJSON
 	for rows.Next() {
-		var user User
-		err := rows.Scan(&user.ID, &user.Email)
+		var user UserExposedJSON
+		err := rows.Scan(&user.Email)
 		if err != nil {
 			return nil, err
 		}

@@ -7,10 +7,21 @@ import (
 	"github.com/chriskoorzen/go-rest-demo/utils"
 )
 
+// "User" is the struct that must be used to interact with the database internally
+// "UserExposedJSON" is the struct that must be returned to the client publicly
+//
+// It is necessary to maintain a separation between the two structs to prevent sensitive information from being exposed
+// because there exists a conflict between the struct tags "binding:"required" and "json".
+// If the json tag is turned off with "-", the binding tag will not work, which is a problem when validating the incoming request body.
+// If not turned off, sensitive fields and information will be exposed to the client.
+type UserExposedJSON struct {
+	Email string `json:"email"`
+}
+
 type User struct {
-	ID       int64  `json:"id"`
-	Email    string `json:"email"    binding:"required"`
-	Password string `json:"password" binding:"required"` // TODO: turn off json emit in production
+	ID       int64
+	Email    string `binding:"required"`
+	Password string `binding:"required"`
 }
 
 func (user *User) Save() error {
