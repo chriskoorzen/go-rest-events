@@ -218,6 +218,3 @@ It supports the following operations:
      ./go-rest-events
      ```
 4. The API will be available at `http://localhost:8080`.
-
-## Conclusion
-This project serves as a basic template for building RESTful APIs in Go. Feel free to extend and modify it to suit your needs.
