@@ -9,8 +9,6 @@ import (
 )
 
 func createUser(context *gin.Context) {
-	devOutputBodyToConsole(context) // output the raw body to console
-
 	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {
@@ -40,8 +38,6 @@ func createUser(context *gin.Context) {
 }
 
 func loginUser(context *gin.Context) {
-	devOutputBodyToConsole(context) // output the raw body to console
-
 	var user models.User
 	err := context.ShouldBindJSON(&user)
 	if err != nil {

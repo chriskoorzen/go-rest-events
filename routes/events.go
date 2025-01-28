@@ -25,8 +25,6 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
-	devOutputBodyToConsole(context) // output the raw body to console
-
 	var event models.Event
 	err := context.ShouldBindJSON(&event)
 	if err != nil {
